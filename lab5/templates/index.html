@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musics Collection</title>
+    <style>
+/* Полностью новый стиль для музыкальной темы */
+body {
+            font-family: 'Verdana', sans-serif;
+            background-color: #121212;
+            color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6f61;
+            font-size: 2.5rem;
+            margin-top: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: linear-gradient(145deg, #1e1e1e, #292929);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        table {
+            width: 100%;
+            border-spacing: 0;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 1rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background-color: #282828;
+            color: #ff6f61;
+        }
+
+        tr:nth-child(even) {
+            background-color: #1e1e1e;
+        }
+
+        tr:hover {
+            background-color: #333;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-delete {
+            background-color: #d32f2f;
+            color: #fff;
+        }
+
+        .btn-delete:hover {
+            background-color: #b71c1c;
+        }
+
+        .btn-edit {
+            background-color: #64b5f6;
+            color: #fff;
+        }
+
+        .btn-edit:hover {
+            background-color: #1976d2;
+        }
+
+        .btn-save {
+            background-color: #4caf50;
+            color: #fff;
+        }
+
+        .btn-save:hover {
+            background-color: #388e3c;
+        }
+
+        .btn-add {
+            background-color: #4caf50;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            margin-top: 20px;
+            border-radius: 6px;
+        }
+
+        .btn-add:hover {
+            background-color: #388e3c;
+        }
+
+        .btn-toggle-json {
+            background-color: #5d4037;
+            color: #fff;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .btn-toggle-json:hover {
+            background-color: #4e342e;
+        }
+
+        .form-container {
+            margin-top: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .json-output {
+            margin-top: 20px;
+            background-color: #181818;
+            color: #9e9e9e;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Music Collection</h1>
+        
+        <!-- Форма для добавления новой книги -->
+        <div class="form-container">
+            <input type="text" id="new-title" class="form-input" placeholder="Book Title">
+            <input type="text" id="new-author" class="form-input" placeholder="Author">
+            <button class="btn btn-add" onclick="addBook()">Add New Song</button>
+        </div>
+
+        <!-- Таблица с книгами -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="book-list">
+                <!-- Книги будут загружаться сюда -->
+            </tbody>
+        </table>
+
+        <!-- Кнопка для показа JSON-ответа -->
+        <button class="btn btn-toggle-json" onclick="toggleJson()">View JSON Response</button>
+
+        <!-- Поле для отображения JSON ответа -->
+        <pre id="json-response" class="json-output"></pre>
+    </div>
+
+    <script>
+        // Функция для показа или скрытия JSON-ответа
+        function toggleJson() {
+            const jsonOutput = document.getElementById('json-response');
+            jsonOutput.style.display = jsonOutput.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Функция для вывода JSON-ответа
+        function displayJsonResponse(data) {
+            document.getElementById('json-response').textContent = JSON.stringify(data, null, 2);
+            document.getElementById('json-response').style.display = 'block';
+        }
+
+        // Функция для загрузки книг с API
+        function loadBooks() {
+            fetch('/books')
+                .then(response => response.json())
+                .then(data => {
+                    const bookList = document.getElementById('book-list');
+                    bookList.innerHTML = ''; // Очистка списка
+                    data.forEach(book => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${book.id}</td>
+                            <td><span id="title-display-${book.id}">${book.title}</span><input type="text" value="${book.title}" id="title-input-${book.id}" style="display:none;"></td>
+                            <td><span id="author-display-${book.id}">${book.author}</span><input type="text" value="${book.author}" id="author-input-${book.id}" style="display:none;"></td>
+                            <td>
+                                <button class="btn btn-edit" id="edit-btn-${book.id}" onclick="enableEdit(${book.id})">Edit</button>
+                                <button class="btn btn-save" id="save-btn-${book.id}" onclick="saveBook(${book.id})" style="display:none;">Save</button>
+                                <button class="btn btn-delete" onclick="deleteBook(${book.id})">Delete</button>
+                            </td>
+                        `;
+                        bookList.appendChild(row);
+                    });
+                    displayJsonResponse(data); // Отображение JSON данных для списка книг
+                })
+                .catch(error => console.error("Error loading books:", error));
+        }
+
+        // Функция для добавления новой книги
+        function addBook() {
+            const title = document.getElementById('new-title').value;
+            const author = document.getElementById('new-author').value;
+
+            fetch('/books', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, author })
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadBooks();
+                displayJsonResponse(data); // Отображение JSON ответа для добавленной книги
+                document.getElementById('new-title').value = '';
+                document.getElementById('new-author').value = '';
+            })
+            .catch(error => console.error("Error adding book:", error));
+        }
+
+        // Функция для включения редактирования книги
+        function enableEdit(id) {
+            document.getElementById(`title-display-${id}`).style.display = "none";
+            document.getElementById(`author-display-${id}`).style.display = "none";
+            document.getElementById(`title-input-${id}`).style.display = "inline";
+            document.getElementById(`author-input-${id}`).style.display = "inline";
+
+            document.getElementById(`edit-btn-${id}`).style.display = "none";
+            document.getElementById(`save-btn-${id}`).style.display = "inline";
+        }
+
+        // Функция для сохранения изменений книги
+        function saveBook(id) {
+            const title = document.getElementById(`title-input-${id}`).value;
+            const author = document.getElementById(`author-input-${id}`).value;
+
+            fetch(`/books/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, author })
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadBooks();
+                displayJsonResponse(data); // Отображение JSON ответа для обновленной книги
+            })
+            .catch(error => console.error("Error saving book:", error));
+        }
+
+        // Функция для удаления книги
+        function deleteBook(id) {
+            fetch(`/books/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    loadBooks();
+                    displayJsonResponse({ message: `Book with ID ${id} deleted` }); // JSON ответ для удаления
+                }
+            })
+            .catch(error => console.error("Error deleting book:", error));
+        }
+
+        // Загружаем книги при загрузке страницы
+        document.addEventListener('DOMContentLoaded', loadBooks);
+    </script>
+</body>
+</html>

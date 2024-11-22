@@ -1,0 +1,77 @@
+Lab8 ReentrantLock Results
+System Info:
+
+Имя узла:                         DESKTOP-M9TM5FH
+Название ОС:                      Майкрософт Windows 11 Pro
+Версия ОС:                        10.0.22631 Н/Д построение 22631
+Изготовитель ОС:                  Microsoft Corporation
+Параметры ОС:                     Изолированная рабочая станция
+Сборка ОС:                        Multiprocessor Free
+Зарегистрированный владелец:      Данил
+Зарегистрированная организация:   
+Код продукта:                     00331-10000-00001-AA730
+Дата установки:                   30.07.2024, 23:19:52
+Время загрузки системы:           18.11.2024, 7:41:00
+Изготовитель системы:             ASUSTeK COMPUTER INC.
+Модель системы:                   ASUS TUF Gaming A15 FA506NC_FA506NC
+Тип системы:                      x64-based PC
+Процессор(ы):                     Число процессоров - 1.
+                                  [01]: AMD64 Family 25 Model 68 Stepping 1 AuthenticAMD ~3301 МГц
+Версия BIOS:                      American Megatrends International, LLC. FA506NC.305, 22.02.2024
+Папка Windows:                    C:\WINDOWS
+Системная папка:                  C:\WINDOWS\system32
+Устройство загрузки:              \Device\HarddiskVolume3
+Язык системы:                     ru;Русский
+Язык ввода:                       ru;Русский
+Часовой пояс:                     (UTC+03:00) Москва, Санкт-Петербург
+Полный объем физической памяти:   15 688 МБ
+Доступная физическая память:      7 490 МБ
+Виртуальная память: Макс. размер: 21 832 МБ
+Виртуальная память: Доступна:     10 573 МБ
+Виртуальная память: Используется: 11 259 МБ
+Расположение файла подкачки:      C:\pagefile.sys
+Домен:                            WORKGROUP
+Сервер входа в сеть:              \\DESKTOP-M9TM5FH
+Исправление(я):                   Число установленных исправлений - 4.
+                                  [01]: KB5045935
+                                  [02]: KB5027397
+                                  [03]: KB5046633
+                                  [04]: KB5044620
+Сетевые адаптеры:                 Число сетевых адаптеров - 3.
+                                  [01]: Realtek PCIe GbE Family Controller
+                                        Имя подключения: Ethernet
+                                        Состояние:       Носитель отключен
+                                  [02]: Realtek 8852BE Wireless LAN WiFi 6 PCI-E NIC
+                                        Имя подключения: Беспроводная сеть
+                                        DHCP включен:    Да
+                                        DHCP-сервер:     192.168.147.32
+                                        IP-адрес
+                                        [01]: 192.168.147.48
+                                        [02]: fe80::e420:a626:87c3:fd1a
+                                  [03]: Wintun Userspace Tunnel
+                                        Имя подключения: nekoray-tun
+                                        DHCP включен:    Нет
+                                        IP-адрес
+                                        [01]: 172.19.0.1
+                                        [02]: fe80::3050:116a:231f:f42e
+Требования Hyper-V:               Расширения режима мониторинга виртуальной машины: Да
+                                  Виртуализация включена во встроенном ПО: Да
+                                  Преобразование адресов второго уровня: Да
+                                  Доступно предотвращение выполнения данных: Да
+
+Threads: 1 increment, 1 decrement
+Final counter value: 0
+Execution time: 0.04862189292907715 seconds
+
+Threads: 2 increment, 2 decrement
+Final counter value: 0
+Execution time: 0.07776069641113281 seconds
+
+Threads: 4 increment, 4 decrement
+Final counter value: 0
+Execution time: 0.16860365867614746 seconds
+
+Threads: 8 increment, 8 decrement
+Final counter value: 0
+Execution time: 0.3261446952819824 seconds
+
